@@ -3,6 +3,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 from confluent_kafka import Producer
+import time
 
 
 load_dotenv()
@@ -48,6 +49,8 @@ for index, row in orders_df.iterrows():
     # Конвертируем ряд в JSON и отправляем сообщение
     message = row.to_json().encode('utf-8')
     producer.produce(topic_name, value=message, callback=delivery_report)
+    time.sleep(1)
+    print('Сообщение отправлено')
 
 # Ждем завершения отправки всех сообщений
 producer.flush()
